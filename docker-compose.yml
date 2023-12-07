@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+
+  server:
+    image: backend
+    container_name: 'cloud-storage-server'
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/my_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Administrator$
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_LIQUIBASE_URL: jdbc:mysql://database:3306/my_db
+      SPRING_LIQUIBASE_USER: root
+      SPRING_LIQUIBASE_PASSWORD: Administrator$
+
+  database:
+    image: mysql
+    container_name: 'cloud-storage-db'
+    volumes:
+      - /mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: Administrator$
+      MYSQL_ROOT_PASSWORD: Administrator$
+      MYSQL_DATABASE: my_db
+    ports:
+      - "3306:3306"
